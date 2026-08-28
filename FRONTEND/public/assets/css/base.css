@@ -1,0 +1,44 @@
+/* ==========================================================================
+   PUNE CRISIS NET // DARK THEME EMERGENCY PLATFORM STYLESHEET
+   ========================================================================== */
+
+:root {
+    --bg-dark: #070a12;
+    --bg-card: #0d1322;
+    --bg-card-hover: #141c30;
+    --border-color: #1e293d;
+    --border-glow: #00f0ff33;
+    
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --accent-blue: #00f0ff;
+    --accent-blue-glow: rgba(0, 240, 255, 0.4);
+    --accent-red: #ff2a5f;
+    --accent-red-glow: rgba(255, 42, 95, 0.4);
+    --accent-warning: #ff9f1c;
+    --accent-warning-glow: rgba(255, 159, 28, 0.4);
+    --accent-success: #10b981;
+    --accent-success-glow: rgba(16, 185, 129, 0.4);
+    
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.theme-dark {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+}

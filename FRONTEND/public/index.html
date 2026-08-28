@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUNE CRISIS NET // AI Flood Prediction & Emergency Rescue Platform</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body class="theme-dark">
+
+    <!-- Top Emergency Header -->
+    <header class="main-header">
+        <div class="header-brand">
+            <div class="logo-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+                <h1 class="brand-title">PUNE CRISIS NET <span class="badge-v2">AI-POWERED</span></h1>
+                <p class="brand-sub">Mutha River Basin Flood Monitoring & Emergency Rescue Control</p>
+            </div>
+        </div>
+
+        <div class="header-stats">
+            <!-- AI Flood Risk Gauge -->
+            <div class="stat-card risk-card danger-glow">
+                <div class="stat-label">AI FLOOD PROBABILITY</div>
+                <div class="stat-value" id="headerRiskPercent">92.4%</div>
+                <div class="stat-bar"><div class="stat-progress" id="headerRiskBar" style="width: 92.4%;"></div></div>
+            </div>
+
+            <!-- River Gauge Status -->
+            <div class="stat-card">
+                <div class="stat-label">MUTHA RIVER LEVEL</div>
+                <div class="stat-value text-danger" id="headerWaterLevel">18.2 m <span class="text-xs">(+1.7m)</span></div>
+                <div class="stat-sub">Danger Level: 16.5m</div>
+            </div>
+
+            <!-- Khadakwasla Discharge -->
+            <div class="stat-card">
+                <div class="stat-label">KHADAKWASLA DISCHARGE</div>
+                <div class="stat-value text-warning" id="headerDischarge">98,500 Cusecs</div>
+                <div class="stat-sub">Gates Open: 8 / 8</div>
+            </div>
+        </div>
+
+        <!-- View Switcher & Siren Toggle -->
+        <div class="header-controls">
+            <button id="sirenBtn" class="btn-siren" onclick="toggleAudioSiren()">
+                <i class="fa-solid fa-bell font-alarm"></i>
+                <span id="sirenText">ALARM SOUND</span>
+            </button>
+            <div class="view-toggle">
+                <button class="toggle-btn active" id="btnCitizenView" onclick="switchView('citizen')">
+                    <i class="fa-solid fa-user-shield"></i> Citizen Portal
+                </button>
+                <button class="toggle-btn" id="btnGovtView" onclick="switchView('govt')">
+                    <i class="fa-solid fa-building-shield"></i> Govt Control Room
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Emergency Ticker Marquee -->
+    <div class="broadcast-ticker">
+        <div class="ticker-label"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL BROADCAST ALERT</div>
+        <div class="ticker-content">
+            <marquee behavior="scroll" direction="left" scrollamount="6">
+                🚨 RED ALERT PUNE: Mutha River level crossed danger mark (18.2m). Khadakwasla Dam discharging 98,500 cusecs. Citizens in Sinhagad Road, Deccan, Sangamwadi, & Pulachi Wadi proceed immediately to designated elevated shelters via recommended green routes! Rescue teams deployed.
+            </marquee>
+        </div>
+    </div>
+
+    <!-- Interactive Backend Execution Flow Pipeline Banner -->
+    <section class="flow-pipeline-container">
+        <div class="pipeline-header">
+            <span><i class="fa-solid fa-diagram-project"></i> REAL-TIME BACKEND ARCHITECTURE & DATA FLOW PIPELINE</span>
+            <span class="pipeline-status-badge" id="pipelineStatus">STATUS: IDLE // READY FOR SOS REQUEST</span>
+        </div>
+        <div class="pipeline-steps">
+            <div class="pipe-step" id="step1">
+                <div class="pipe-icon"><i class="fa-solid fa-file-pen"></i></div>
+                <div class="pipe-info">
+                    <div class="pipe-title">User fills flood report</div>
+                    <div class="pipe-sub">Form details collected</div>
+                </div>
+            </div>
+            <div class="pipe-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="pipe-step" id="step2">
+                <div class="pipe-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                <div class="pipe-info">
+                    <div class="pipe-title">Frontend sends POST</div>
+                    <div class="pipe-sub">fetch('/flood-reports')</div>
+                </div>
+            </div>
+            <div class="pipe-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="pipe-step" id="step3">
+                <div class="pipe-icon"><i class="fa-solid fa-server"></i></div>
+                <div class="pipe-info">
+                    <div class="pipe-title">POST /flood-reports</div>
+                    <div class="pipe-sub">Express API Endpoint</div>
+                </div>
+            </div>
+            <div class="pipe-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="pipe-step" id="step4">
+                <div class="pipe-icon"><i class="fa-solid fa-vial-circle-check"></i></div>
+                <div class="pipe-info">
+                    <div class="pipe-title">Express validates data</div>
+                    <div class="pipe-sub">Schema & coords check</div>
+                </div>
+            </div>
+            <div class="pipe-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="pipe-step" id="step5">
+                <div class="pipe-icon"><i class="fa-solid fa-database"></i></div>
+                <div class="pipe-info">
+                    <div class="pipe-title">PostgreSQL stores report</div>
+                    <div class="pipe-sub">DB Record Created</div>
+                </div>
+            </div>
+            <div class="pipe-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="pipe-step" id="step6">
+                <div class="pipe-icon"><i class="fa-solid fa-reply-all"></i></div>
+                <div class="pipe-info">
+                    <div class="pipe-title">Backend sends response</div>
+                    <div class="pipe-sub">HTTP 201 Created</div>
+                </div>
+            </div>
+            <div class="pipe-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="pipe-step" id="step7">
+                <div class="pipe-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="pipe-info">
+                    <div class="pipe-title">Frontend displays success</div>
+                    <div class="pipe-sub">UI updated & Govt notified</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN PORTAL WRAPPER -->
+    <main class="main-container">
+
+        <!-- ================================================================= -->
+        <!-- VIEW 1: CITIZEN PORTAL -->
+        <!-- ================================================================= -->
+        <div id="citizenView" class="view-panel active">
+            <div class="portal-grid">
+
+                <!-- Left Column: Map & Evacuation Router -->
+                <div class="left-pane">
+
+                    <!-- Pune Interactive Map Container -->
+                    <div class="card map-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-map-location-dot"></i> PUNE CITY LIVE FLOOD & EVACUATION MAP
+                            </div>
+                            <div class="map-legend">
+                                <span class="legend-item"><span class="color-dot danger"></span> High Risk Flood Zone</span>
+                                <span class="legend-item"><span class="color-dot warning"></span> Warning Radius</span>
+                                <span class="legend-item"><span class="color-dot safe"></span> Elevated Safe Shelter</span>
+                                <span class="legend-item"><span class="color-dot route"></span> Fast Evacuation Path</span>
+                            </div>
+                        </div>
+                        <div id="puneMap" class="map-view"></div>
+                    </div>
+
+                    <!-- Evacuation Navigation Engine & Traffic Optimizer -->
+                    <div class="card evacuation-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-route text-success"></i> SHORTEST & FASTEST TRAFFIC-AWARE EVACUATION ROUTER
+                            </div>
+                            <span class="badge badge-success"><i class="fa-solid fa-bolt"></i> Live Traffic Optimized</span>
+                        </div>
+                        <div class="evacuation-controls">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-location-dot text-danger"></i> Your Current Pune Area:</label>
+                                <select id="originArea" class="form-select" onchange="calculateEvacuationRoute()">
+                                    <option value="sinhagad">Sinhagad Road (Vitthalwadi / Rajaram Bridge)</option>
+                                    <option value="deccan" selected>Deccan Gymkhana (Pulachi Wadi / Mutha Causeway)</option>
+                                    <option value="sangamwadi">Sangamwadi (Mula-Mutha Confluence)</option>
+                                    <option value="kalyaninagar">Kalyani Nagar (Riverbank Low-lying area)</option>
+                                    <option value="hadapsar">Hadapsar / Mundhwa Causeways</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-campground text-success"></i> Destination Safe Elevated Shelter:</label>
+                                <select id="destShelter" class="form-select" onchange="calculateEvacuationRoute()">
+                                    <option value="arai">ARAI Hill Emergency Shelter Base (Elevated 650m)</option>
+                                    <option value="parvati">Parvati Hill High Camp (Elevated 640m)</option>
+                                    <option value="punegov">Pune University Emergency Grounds (Safe High Ground)</option>
+                                    <option value="empress">Empress Garden Elevated Camp</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Calculated Route Result Card -->
+                        <div class="route-result-box" id="routeResultBox">
+                            <div class="route-metrics">
+                                <div class="metric">
+                                    <div class="metric-val text-success" id="routeDist">2.4 km</div>
+                                    <div class="metric-lbl">Shortest Distance</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-val text-primary" id="routeTime">6 mins</div>
+                                    <div class="metric-lbl">Est. Time</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-val text-success" id="routeTraffic"><i class="fa-solid fa-circle-check"></i> Minimal</div>
+                                    <div class="metric-lbl">Traffic Level</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-val text-warning" id="routeSubmerged">0 Causeways</div>
+                                    <div class="metric-lbl">Submerged Avoided</div>
+                                </div>
+                            </div>
+                            <div class="route-instructions" id="routeInstructions">
+                                🚗 Recommended Route: Take Karve Road ➔ Law College Road ➔ Paud Road bypass directly up to ARAI Hill Base Camp. Avoid Alka Talkies bridge causeway (Flooded).
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: SOS Form & Live CCTV Feeds -->
+                <div class="right-pane">
+
+                    <!-- 1-Click SOS / Flood Report Form (Exact Flowchart Implementation) -->
+                    <div class="card sos-card">
+                        <div class="card-header danger-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-truck-medical text-danger"></i> EMERGENCY RESCUE SOS & FLOOD REPORT
+                            </div>
+                            <span class="badge badge-danger blink">IMMEDIATE DISPATCH</span>
+                        </div>
+                        <form id="sosReportForm" onsubmit="handleSosSubmit(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Full Name *</label>
+                                    <input type="text" id="citizenName" class="form-input" placeholder="e.g. Ramesh Kulkarni" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number *</label>
+                                    <input type="tel" id="citizenPhone" class="form-input" placeholder="e.g. 9823012345" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Pune Neighborhood Location *</label>
+                                    <select id="citizenArea" class="form-select" required>
+                                        <option value="Sinhagad Road">Sinhagad Road (Vitthalwadi / Anandnagar)</option>
+                                        <option value="Deccan Gymkhana">Deccan Gymkhana / Pulachi Wadi</option>
+                                        <option value="Shivajinagar">Shivajinagar / Court Area causeway</option>
+                                        <option value="Sangamwadi">Sangamwadi / Yerwada</option>
+                                        <option value="Kalyani Nagar">Kalyani Nagar / Pingale Wasti</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Estimated Water Depth *</label>
+                                    <select id="waterDepth" class="form-select" required>
+                                        <option value="1-2 Feet (Moderate)">1 - 2 Feet (Road Flooded)</option>
+                                        <option value="3-5 Feet (Severe)">3 - 5 Feet (Ground Floor Submerged)</option>
+                                        <option value="6+ Feet (CRITICAL)">6+ Feet (Chest Level / Roof Evacuation)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Emergency Category & Need *</label>
+                                <select id="emergencyCategory" class="form-select" required>
+                                    <option value="Stranded on Roof / Upper Floor">Stranded on Roof / Upper Floor (Boat Needed)</option>
+                                    <option value="Elderly / Medical Emergency">Elderly / Medical Emergency (Immediate Ambulance)</option>
+                                    <option value="Trapped in Submerged Vehicle">Trapped in Submerged Vehicle</option>
+                                    <option value="Food & Fresh Water Request">Evacuated but need Emergency Food & Clean Water</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Detailed Description & Landmarks</label>
+                                <textarea id="sosDescription" class="form-textarea" rows="2" placeholder="e.g. House No 42, Near Vitthal Mandir, 4 members including senior citizens trapped on balcony..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-sos btn-block" id="btnSubmitSos">
+                                <i class="fa-solid fa-satellite-dish"></i> SUBMIT SOS REPORT & DISPATCH RESCUE TEAM
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Live CCTV Camera Monitoring Section -->
+                    <div class="card cctv-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-video text-info"></i> PUNE LIVE FLOOD SURVEILLANCE CAMERAS
+                            </div>
+                            <span class="badge badge-info"><i class="fa-solid fa-circle-dot text-danger blink"></i> 4 Feeds Active</span>
+                        </div>
+                        <div class="cctv-grid-mini">
+                            <div class="cctv-thumb-card" onclick="openCctvModal('khadakwasla')">
+                                <div class="cctv-thumb-img">
+                                    <img src="assets/cctv_khadakwasla.jpg" alt="Khadakwasla Dam CCTV">
+                                    <span class="cctv-tag danger-tag"><i class="fa-solid fa-circle text-danger"></i> CAM-01 KHADAKWASLA</span>
+                                </div>
+                                <div class="cctv-thumb-caption">
+                                    <strong>Khadakwasla Dam Spillway</strong>
+                                    <span>Discharge: 98,500 Cusecs</span>
+                                </div>
+                            </div>
+
+                            <div class="cctv-thumb-card" onclick="openCctvModal('deccan')">
+                                <div class="cctv-thumb-img">
+                                    <img src="assets/cctv_deccan.jpg" alt="Deccan Causeway CCTV">
+                                    <span class="cctv-tag warning-tag"><i class="fa-solid fa-circle text-warning"></i> CAM-02 DECCAN</span>
+                                </div>
+                                <div class="cctv-thumb-caption">
+                                    <strong>Deccan Mutha Causeway</strong>
+                                    <span>Water: +1.8m Over Causeway</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- VIEW 2: GOVERNMENT COMMAND & CONTROL ROOM (DARK MODE) -->
+        <!-- ================================================================= -->
+        <div id="govtView" class="view-panel">
+            <div class="govt-dashboard-grid">
+
+                <!-- Control Room Top Telemetry Bar -->
+                <div class="govt-row span-12">
+                    <div class="card govt-hud-card">
+                        <div class="hud-header">
+                            <i class="fa-solid fa-tower-observation text-primary"></i> PUNE MUNICIPAL EMERGENCY DISASTER CONTROL ROOM // LIVE TELEMETRY
+                        </div>
+                        <div class="hud-metrics-grid">
+                            <div class="hud-stat">
+                                <div class="hud-val text-danger" id="govtDischargeVal">98,500 Cusecs</div>
+                                <div class="hud-lbl">Khadakwasla Release</div>
+                            </div>
+                            <div class="hud-stat">
+                                <div class="hud-val text-danger" id="govtWaterLvl">18.2 meters</div>
+                                <div class="hud-lbl">Mutha Gauge Reading</div>
+                            </div>
+                            <div class="hud-stat">
+                                <div class="hud-val text-warning" id="govtRainfall">68.5 mm/hr</div>
+                                <div class="hud-lbl">Pashan / Catchment Rain</div>
+                            </div>
+                            <div class="hud-stat">
+                                <div class="hud-val text-info" id="govtIncidentCount">4 Active SOS</div>
+                                <div class="hud-lbl">Citizen Rescue Calls</div>
+                            </div>
+                            <div class="hud-stat">
+                                <div class="hud-val text-success" id="govtRescueUnits">12 NDRF Teams</div>
+                                <div class="hud-lbl">Active Deployed Units</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Left Column: Real-Time Incident Stream & Rescue Dispatcher -->
+                <div class="govt-left-pane">
+                    
+                    <div class="card incident-card">
+                        <div class="card-header danger-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-list-check text-danger"></i> INCOMING CITIZEN HELP REQUESTS & DISPATCH QUEUE
+                            </div>
+                            <span class="badge badge-danger" id="incidentBadge">4 PENDING DISPATCH</span>
+                        </div>
+
+                        <!-- Incident Cards Container -->
+                        <div class="incident-list" id="incidentList">
+                            <!-- Dynamic Incident Cards Injected Here -->
+                        </div>
+                    </div>
+
+                    <!-- Mass Emergency Broadcast Tool -->
+                    <div class="card broadcast-tool-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-bullhorn text-warning"></i> MASS CITIZEN & GOVT EMERGENCY ALERT BROADCASTER
+                            </div>
+                        </div>
+                        <div class="broadcast-controls">
+                            <div class="form-group">
+                                <label>Target Flood Zones:</label>
+                                <select id="broadcastTarget" class="form-select">
+                                    <option value="ALL">ALL PUNE CITIZENS (Mass Broadcast)</option>
+                                    <option value="Sinhagad">Sinhagad Road Riverbank Belt</option>
+                                    <option value="Deccan">Deccan & Pulachi Wadi</option>
+                                    <option value="Sangamwadi">Sangamwadi & Yerwada</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Alert Severity Level:</label>
+                                <select id="broadcastLevel" class="form-select">
+                                    <option value="RED">RED ALERT - MANDATORY IMMEDIATE EVACUATION</option>
+                                    <option value="ORANGE">ORANGE WARNING - BE ON HIGH ALERT</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Broadcast Message:</label>
+                                <input type="text" id="broadcastMsg" class="form-input" value="🚨 URGENT: Mutha river level rising rapidly. NDRF rescue boats dispatched. Please move to elevated ground immediately!">
+                            </div>
+                            <button class="btn btn-warning btn-block" onclick="sendMassBroadcast()">
+                                <i class="fa-solid fa-radio"></i> BROADCAST EMERGENCY MESSAGE & SOUND SIREN
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: AI Risk Simulator & Live Camera Wall -->
+                <div class="govt-right-pane">
+
+                    <!-- AI Flood Risk Predictor Simulator Controls -->
+                    <div class="card simulator-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-sliders text-info"></i> AI FLOOD PROBABILITY SIMULATOR & HYDROMETRIC MODEL
+                            </div>
+                        </div>
+                        <div class="sim-controls">
+                            <div class="sim-slider-group">
+                                <div class="slider-header">
+                                    <span>Khadakwasla Dam Gate Discharge (Cusecs):</span>
+                                    <strong class="text-danger" id="sliderDischargeVal">98,500 Cusecs</strong>
+                                </div>
+                                <input type="range" id="sliderDischarge" min="10000" max="150000" step="2500" value="98500" class="sim-slider" oninput="updateFloodSim()">
+                            </div>
+
+                            <div class="sim-slider-group">
+                                <div class="slider-header">
+                                    <span>Catchment Rainfall Intensity (mm/hr):</span>
+                                    <strong class="text-warning" id="sliderRainVal">68.5 mm/hr</strong>
+                                </div>
+                                <input type="range" id="sliderRain" min="5" max="150" step="2" value="68" class="sim-slider" oninput="updateFloodSim()">
+                            </div>
+
+                            <!-- Calculated Probability Result -->
+                            <div class="sim-result-box">
+                                <div class="sim-result-label">PREDICTED PUNE FLOOD RISK %</div>
+                                <div class="sim-result-value" id="simRiskPercent">92.4%</div>
+                                <div class="sim-result-status text-danger" id="simRiskStatus">CRITICAL DANGER ZONE // AUTOMATED RESCUE DISPATCH TRIGGERED</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Government Control Room Camera Matrix Grid Wall -->
+                    <div class="card matrix-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-border-all text-primary"></i> PUNE RIVER MONITORING CCTV MATRIX
+                            </div>
+                        </div>
+                        <div class="cctv-matrix-grid">
+                            <div class="matrix-cam" onclick="openCctvModal('khadakwasla')">
+                                <img src="assets/cctv_khadakwasla.jpg" alt="Dam Camera">
+                                <div class="cam-overlay">CAM-01: KHADAKWASLA DAM [DISCHARGE 98.5K]</div>
+                            </div>
+                            <div class="matrix-cam" onclick="openCctvModal('deccan')">
+                                <img src="assets/cctv_deccan.jpg" alt="Deccan Causeway Camera">
+                                <div class="cam-overlay">CAM-02: DECCAN MUTHA CAUSEWAY [OVERFLOW]</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal: CCTV Live Feed Popup -->
+    <div id="cctvModal" class="modal">
+        <div class="modal-content glass-modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modalCamTitle"><i class="fa-solid fa-video"></i> CAM-01: KHADAKWASLA DAM SPILLWAY</div>
+                <span class="close-modal" onclick="closeCctvModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="cctv-full-view">
+                    <img id="modalCamImg" src="assets/cctv_khadakwasla.jpg" alt="CCTV Stream">
+                    <div class="cctv-hud-top">
+                        <span><i class="fa-solid fa-circle text-danger blink"></i> LIVE SURVEILLANCE FEED</span>
+                        <span id="modalCamTime">2026-08-09 18:24:00 IST</span>
+                    </div>
+                    <div class="cctv-hud-bottom" id="modalCamTelemetry">
+                        SYSTEM STATUS: CRITICAL DANGER ZONE // DISCHARGE: 98,500 CUSECS // GATES: 8/8 OPEN
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Backend Response Confirmation Modal (From Flowchart) -->
+    <div id="responseModal" class="modal">
+        <div class="modal-content glass-modal modal-success">
+            <div class="modal-header">
+                <div class="modal-title text-success"><i class="fa-solid fa-circle-check"></i> BACKEND RESPONSE: SOS REPORT REGISTERED</div>
+                <span class="close-modal" onclick="closeResponseModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="response-box">
+                    <div class="res-status-badge">HTTP 201 CREATED // EXPRESS API SUCCESS</div>
+                    <p class="res-text">Your SOS emergency rescue request has been successfully validated by Express backend and stored in PostgreSQL database!</p>
+                    
+                    <div class="res-details-card">
+                        <div class="res-row"><span>SOS Ticket ID:</span> <strong id="resTicketId" class="text-primary">PNE-SOS-9842</strong></div>
+                        <div class="res-row"><span>Assigned Unit:</span> <strong id="resAssignedUnit" class="text-success">NDRF Battalion 5 (Team Alpha)</strong></div>
+                        <div class="res-row"><span>Estimated Arrival:</span> <strong id="resEta" class="text-warning">8 - 12 Minutes</strong></div>
+                        <div class="res-row"><span>Rescue Status:</span> <strong id="resStatus" class="badge badge-danger">DISPATCH IN PROGRESS</strong></div>
+                    </div>
+
+                    <div class="res-instructions">
+                        📍 <strong>Instructions for Citizen:</strong> Stay on high ground or roof if water depth is over 3 feet. Keep your mobile phone charged. The NDRF rescue boat team has received your GPS coordinates.
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="closeResponseModal()">
+                    <i class="fa-solid fa-check"></i> ACKNOWLEDGE & TRACK RESCUE STATUS
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Custom Application JS -->
+    <script src="assets/js/core/state.js"></script>
+    <script src="assets/js/data/locations.js"></script>
+    <script src="assets/js/core/ui.js"></script>
+    <script src="assets/js/features/map.js"></script>
+    <script src="assets/js/features/evacuation.js"></script>
+    <script src="assets/js/features/sos.js"></script>
+    <script src="assets/js/features/control-room.js"></script>
+    <script src="assets/js/features/cctv.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

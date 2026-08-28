@@ -1,0 +1,10 @@
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+    .portal-grid, .govt-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .hud-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .header-stats { display: none; }
+}

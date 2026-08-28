@@ -1,0 +1,375 @@
+/* ==========================================================================
+   CCTV GALLERY & MODAL
+   ========================================================================== */
+.cctv-grid-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.cctv-thumb-card {
+    background: #090d16;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cctv-thumb-card:hover {
+    border-color: var(--accent-blue);
+    transform: scale(1.02);
+}
+
+.cctv-thumb-img {
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cctv-thumb-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cctv-tag {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    font-family: var(--font-mono);
+}
+
+.cctv-thumb-caption {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.cctv-thumb-caption span {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+/* CCTV Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+}
+
+.modal.active { display: flex; }
+
+.glass-modal {
+    background: #0f172a;
+    border: 1px solid var(--accent-blue);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 750px;
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 12px 18px;
+    background: #090e1a;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: #fff;
+}
+
+.close-modal {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.close-modal:hover { color: #fff; }
+
+.modal-body { padding: 18px; }
+
+.cctv-full-view {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.cctv-full-view img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cctv-hud-top {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.75);
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: var(--accent-blue);
+}
+
+.cctv-hud-bottom {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background: rgba(255,42,95,0.85);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   GOVERNMENT CONTROL ROOM (DARK MODE) STYLES
+   ========================================================================== */
+.govt-dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 20px;
+}
+
+.span-12 { grid-column: span 2; }
+
+.govt-hud-card {
+    background: linear-gradient(135deg, #090e1a 0%, #0d1527 100%);
+    border-color: var(--accent-blue);
+}
+
+.hud-header {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--accent-blue);
+    margin-bottom: 12px;
+}
+
+.hud-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.hud-stat {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.hud-val {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
+.hud-lbl {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.govt-left-pane, .govt-right-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.incident-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.incident-card-item {
+    background: #090d16;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--accent-red);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.incident-card-item.dispatched {
+    border-left-color: var(--accent-success);
+}
+
+.inc-info h4 {
+    font-size: 0.85rem;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.inc-info p {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+}
+
+.inc-time {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.sim-slider-group {
+    margin-bottom: 16px;
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+}
+
+.sim-slider {
+    width: 100%;
+    accent-color: var(--accent-red);
+}
+
+.sim-result-box {
+    background: linear-gradient(135deg, rgba(255,42,95,0.15) 0%, rgba(13,19,34,1) 100%);
+    border: 1px solid var(--accent-red);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.sim-result-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.sim-result-value {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--accent-red);
+    margin: 4px 0;
+}
+
+.sim-result-status {
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.cctv-matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.matrix-cam {
+    height: 140px;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+}
+
+.matrix-cam img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cam-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.85);
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: var(--accent-blue);
+    padding: 4px 8px;
+}
+
+/* Utilities & Text Colors */
+.text-danger { color: var(--accent-red) !important; }
+.text-warning { color: var(--accent-warning) !important; }
+.text-success { color: var(--accent-success) !important; }
+.text-primary { color: var(--accent-blue) !important; }
+.text-info { color: var(--accent-blue) !important; }
+.text-xs { font-size: 0.7rem; }
+
+/* Response Modal */
+.res-status-badge {
+    font-family: var(--font-mono);
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-success);
+    border: 1px solid var(--accent-success);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.res-details-card {
+    background: #090d16;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+}
+
+.res-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.res-instructions {
+    background: rgba(255, 159, 28, 0.1);
+    border-left: 3px solid var(--accent-warning);
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    color: #ffedd5;
+    margin-bottom: 14px;
+}
