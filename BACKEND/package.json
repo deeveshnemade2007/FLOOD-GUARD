@@ -1,0 +1,32 @@
+{
+  "name": "floodsafe-pune-backend",
+  "version": "1.0.0",
+  "description": "Smart Monsoon Flood Detection and Automatic Road Closure Backend for Pune City - AI4SDG 2026",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node -e \"require('./src/models/dbSchema.js').seedDatabase()\"",
+    "simulate": "node src/simulator/puneScenarioRunner.js",
+    "test": "node test/api_test.js"
+  },
+  "keywords": [
+    "flood-detection",
+    "iot",
+    "smart-city",
+    "road-closure",
+    "pune",
+    "express",
+    "postgresql"
+  ],
+  "author": "Sanket (Backend Lead)",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.13.1"
+  }
+}
